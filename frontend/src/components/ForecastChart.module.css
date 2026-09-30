@@ -1,0 +1,56 @@
+/* ForecastChart tooltip */
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-tertiary);
+  font-size: 0.80rem;
+  font-family: var(--font-ui);
+}
+
+.tooltip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  min-width: 130px;
+  box-shadow: var(--shadow-md);
+}
+
+.tooltipTime {
+  font-family: var(--font-mono);
+  font-size: 0.70rem;
+  color: var(--text-tertiary);
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.tooltipDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.tooltipLabel {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  flex: 1;
+  font-family: var(--font-ui);
+}
+
+.tooltipVal {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}

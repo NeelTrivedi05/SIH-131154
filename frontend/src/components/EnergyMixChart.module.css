@@ -1,0 +1,36 @@
+/* EnergyMixChart tooltip + legend */
+
+.tooltip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-ui);
+}
+
+.tooltipLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+
+.tooltipVal {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.centerLabel {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  fill: var(--text-primary);
+}
+
+.centerSub {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  fill: var(--text-secondary);
+}

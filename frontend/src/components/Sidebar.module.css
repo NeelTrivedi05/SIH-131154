@@ -1,0 +1,160 @@
+/* Sidebar — environment + battery panel */
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionTitle {
+  font-size: 0.70rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-ui);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionSubtitle {
+  font-size: 0.70rem;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+}
+
+/* Environment grid — 2 col */
+.envGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.envTile {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.envTileIcon {
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+}
+
+.envTileLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-ui);
+}
+
+.envTileValue {
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+
+.envTileUnit {
+  font-size: 0.70rem;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-weight: 400;
+}
+
+/* Battery arc */
+.arcWrap {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+/* Renewable fraction bar */
+.fracRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.fracLabel {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+}
+
+.fracVal {
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--green);
+}
+
+.fracBar {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-subtle);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.fracFill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+/* Savings */
+.savingsRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.savingsItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.savingsItem:last-child { border-bottom: none; }
+
+.savingsKey {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+}
+
+.savingsVal {
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.savingsValGreen { color: var(--green); }
+.savingsValAmber { color: var(--amber); }

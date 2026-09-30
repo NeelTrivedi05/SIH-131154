@@ -1,0 +1,72 @@
+/* KpiCard — compact metric tile */
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.label {
+  font-size: 0.70rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-tertiary);
+  font-family: var(--font-ui);
+}
+
+.value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.unit {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+}
+
+.sub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+}
+
+/* Green indicator — positive/normal */
+.indicatorGreen {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.70rem;
+  font-weight: 600;
+  color: var(--green);
+  background: var(--green-light);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  margin-top: 2px;
+}
+
+/* Amber indicator — warning */
+.indicatorAmber {
+  color: var(--amber);
+  background: var(--amber-light);
+}
+
+/* Red indicator — critical */
+.indicatorRed {
+  color: var(--data-warning);
+  background: #FAF0EC;
+}

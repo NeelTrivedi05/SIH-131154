@@ -1,0 +1,118 @@
+.appContainer {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-app);
+}
+
+.mainContent {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 24px 32px 48px;
+  position: relative;
+}
+
+.stationStatusBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+/* Small monospace status pill */
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  box-shadow: var(--shadow-sm);
+}
+
+.statusPillOnline {
+  background: var(--green);
+  border-color: var(--green-dark);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+/* Live dot — clean cyan-mint on dark green pill */
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34D399;
+}
+
+/* Minimal reset button */
+.resetBtn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 500;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s, color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.resetBtn:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* Page heading — clean, not huge */
+.heroHeader {
+  margin-top: 4px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+
+.heroTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.heroSubtitle {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.splitRow {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  gap: 20px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  align-items: start;
+}
+
+.leftCol { width: 100%; }
+.rightCol { width: 100%; }
+
+@media (max-width: 1024px) {
+  .splitRow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

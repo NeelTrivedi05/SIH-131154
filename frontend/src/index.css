@@ -1,0 +1,83 @@
+/* =========================================================
+   POLAR RESEARCH STATION — Design Tokens
+   Theme: Industrial + Scientific, Light with Clean Semantic Accents
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* ── Surfaces ──────────────────────────────────────── */
+  --bg-app:       #EBF0ED;  /* crisp polar tint with distinct contrast against white */
+  --bg-card:      #FFFFFF;
+  --bg-sidebar:   #FFFFFF;
+  --bg-input:     #FFFFFF;
+  --bg-subtle:    #E2E8E4;
+
+  /* ── Borders ──────────────────────────────────────── */
+  --border:       #D2D9D5;
+  --border-focus: #174A45;
+
+  /* ── Typography ───────────────────────────────────── */
+  --text-primary:   #17201D;
+  --text-secondary: #58635E;
+  --text-tertiary:  #7D8A84;
+
+  /* ── Brand & Arctic Greens ────────────────────────── */
+  --green:        #174A45;
+  --green-dark:   #103B37;
+  --green-light:  #E5F0ED;
+  --teal:         #237367;
+  --teal-light:   #E4F4F0;
+
+  /* ── Polar Maritime Blue (Life Support & Navigation) ── */
+  --blue:         #1B6488;
+  --blue-light:   #E8F2F7;
+
+  /* ── Energy Accents (Solar, Warnings, Alerts) ─────── */
+  --amber:        #C58A24;
+  --amber-light:  #FDF3E3;
+  --red:          #B65C3A;
+  --red-light:    #FCEEE8;
+
+  /* ── Data Colors ──────────────────────────────────── */
+  --data-solar:   #C58A24;
+  --data-battery: #237367;
+  --data-grid:    #59635F;
+  --data-warning: #B65C3A;
+  --data-wind:    #1B6488;
+  --data-load:    #17201D;
+
+  /* ── Shadows ──────────────────────────────────────── */
+  --shadow-sm:    0 1px 3px rgba(23, 32, 29, 0.05);
+  --shadow-md:    0 2px 6px rgba(23, 32, 29, 0.07);
+
+  /* ── Fonts ────────────────────────────────────────── */
+  --font-ui:   'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Cascadia Mono', 'Consolas', monospace;
+
+  /* ── Radius ───────────────────────────────────────── */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-app); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #B2BCB7; }

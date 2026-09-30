@@ -1,0 +1,140 @@
+/* Charts — white cards, muted axes, data colors from tokens */
+
+.chartCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.chartTitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chartTitle::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background: var(--green);
+  border-radius: 2px;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.solidLine {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+}
+
+.dashedLine {
+  display: inline-block;
+  width: 14px;
+  height: 0;
+  border-top: 2px dashed;
+}
+
+.squareIcon {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+}
+
+.chartBody { width: 100%; }
+
+.xAxisCaption {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+  font-family: var(--font-ui);
+}
+
+/* Tooltip — white, thin border, no blur */
+.tooltip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-ui);
+  min-width: 130px;
+}
+
+.tooltipTime {
+  font-family: var(--font-mono);
+  font-size: 0.70rem;
+  color: var(--text-tertiary);
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.tooltipDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tooltipName { color: var(--text-secondary); flex: 1; }
+
+.tooltipVal {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.toolIcons { display: flex; gap: 6px; }
+
+.toolIconBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.toolIconBtn:hover { color: var(--text-secondary); }

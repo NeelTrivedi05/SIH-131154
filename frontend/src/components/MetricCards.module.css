@@ -1,0 +1,133 @@
+/* MetricCards — clean white cards with semantic color top borders and crisp badges */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-top-width: 3px;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Card Accent Top Borders */
+.cardMae {
+  border-top-color: var(--blue);
+}
+
+.cardDiesel {
+  border-top-color: var(--data-grid);
+}
+
+.cardFuel {
+  border-top-color: var(--green);
+}
+
+.cardCo2 {
+  border-top-color: var(--teal);
+}
+
+.cardRe {
+  border-top-color: var(--amber);
+}
+
+.label {
+  font-size: 0.69rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-family: var(--font-ui);
+}
+
+.value {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.unit {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  letter-spacing: 0;
+}
+
+/* Badges with distinct semantic tints */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.69rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+  margin-top: 2px;
+  width: fit-content;
+}
+
+.badgeBlue {
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1px solid #D1E5F1;
+}
+
+.badgeSlate {
+  background: #EFF2F0;
+  color: #485450;
+  border: 1px solid #D6DCD9;
+}
+
+.badgeGreen {
+  background: var(--green-light);
+  color: var(--green);
+  border: 1px solid #C4DED6;
+}
+
+.badgeTeal {
+  background: var(--teal-light);
+  color: var(--teal);
+  border: 1px solid #C1E5DC;
+}
+
+.badgeAmber {
+  background: var(--amber-light);
+  color: #9E6B18;
+  border: 1px solid #F5DEB3;
+}
+
+.arrow {
+  font-weight: 700;
+}
+
+@media (max-width: 1200px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}

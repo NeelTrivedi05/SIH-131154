@@ -1,0 +1,309 @@
+flowchart TD
+  A["PolarEMS<br/>Offline Advisory Energy Management Simulator"] --> B["Light Industrial UI"]
+  A --> C["Antarctic Stations"]
+  C --> C1["Maitri"]
+  C --> C2["Bharati"]
+
+  subgraph Principles["Honesty and Safety"]
+    P1["SIMULATED results"]
+    P2["ASSUMED placeholders clearly marked"]
+    P3["REAL data only when uploaded"]
+    P4["SYNTHETIC data reproducible by seed"]
+    P5["Advisory only"]
+    P6["No hardware control"]
+    P7["No invented metrics"]
+  end
+
+  subgraph Stack["Offline Technology Stack"]
+    S1["Python 3.11"]
+    S2["FastAPI"]
+    S3["SQLite"]
+    S4["Pydantic"]
+    S5["NumPy and pandas"]
+    S6["scikit-learn"]
+    S7["statsmodels"]
+    S8["pvlib"]
+    S9["PuLP with HiGHS or CBC"]
+    S10["scipy.optimize.milp fallback"]
+    S11["React and Vite"]
+    S12["TypeScript"]
+    S13["Recharts"]
+    S14["SSE live updates"]
+    S15["Docker Compose"]
+  end
+
+  subgraph Config["Station Configuration"]
+    Cfg1["YAML loader"]
+    Cfg2["Required-field validation"]
+    Cfg3["Startup ASSUMED warning"]
+    Cfg4["Provenance tag on every value"]
+    Cfg5["Easy replacement of placeholders"]
+    Cfg6["No assumed renewable availability"]
+    Cfg1 --> Cfg2 --> Cfg3
+    Cfg1 --> Cfg4
+  end
+
+  subgraph Data["Data Sources"]
+    D1["Synthetic physics-informed generator"]
+    D2["CSV replay importer"]
+    D3["Simulated Modbus-style feed"]
+    D4["Optional offline forecast file"]
+    D5["REAL"]
+    D6["SYNTHETIC"]
+    D7["No silent tag mixing"]
+    D1 --> D6
+    D2 --> D5
+    D1 --> D7
+    D2 --> D7
+  end
+
+  subgraph Pipeline["Four-Layer Simulation Loop"]
+    Sense["1. SENSE<br/>Read-only ingest and validation"]
+    Predict["2. PREDICT<br/>Forecasts, estimator, thermal twin"]
+    Optimize["3. OPTIMIZE<br/>Rolling-horizon MILP"]
+    Advise["4. ADVISE AND PROTECT<br/>Actions, fallback, alerts, audit"]
+    Sense --> Predict --> Optimize --> Advise --> Sense
+  end
+
+  subgraph Validation["Sense Validation"]
+    V1["Range checks"]
+    V2["Rate-of-change checks"]
+    V3["Physics power-balance checks"]
+    V4["Gap flags"]
+    V5["Bad data flagged"]
+    V1 --> V5
+    V2 --> V5
+    V3 --> V5
+    V4 --> V5
+  end
+
+  subgraph Prediction["Prediction Services"]
+    E1["BMS SoC primary"]
+    E2["Kalman consistency check"]
+    E3["Disagreement alert"]
+    F1["Ridge load forecast"]
+    F2["Lag, hour, temperature features"]
+    F3["P10, P50, P90 bands"]
+    F4["24 to 72 hour horizon"]
+    F5["Persistence baseline"]
+    F6["Fallback if ridge does not beat persistence"]
+    R1["PV nowcast and persistence"]
+    R2["pvlib sun position"]
+    R3["Observed cloud factor"]
+    R4["Wind power curve"]
+    R5["Widen bands when forecast absent"]
+    T1["Lumped RC thermal model"]
+    T2["Outside-temperature heat demand"]
+    T3["CHP recoverable heat"]
+    T4["Boiler shortfall"]
+    E1 --> E2 --> E3
+    F1 --> F2 --> F3 --> F4
+    F1 --> F5 --> F6
+    R1 --> R2 --> R3
+    R1 --> R4
+    R1 --> R5
+    T1 --> T2
+    T1 --> T3
+    T1 --> T4
+  end
+
+  subgraph Optimizer["Rolling-Horizon MILP"]
+    O1["30-minute steps"]
+    O2["24-hour horizon"]
+    O3["Re-solve every step"]
+    O4["Apply first step to simulation only"]
+    O5["Genset commitment and dispatch"]
+    O6["Battery charge, discharge, SoC"]
+    O7["Renewable use and curtailment"]
+    O8["Zone load shedding"]
+    O9["Boiler heat"]
+    O10["Power balance"]
+    O11["Min up and min down"]
+    O12["Spinning reserve"]
+    O13["Battery temperature and efficiency"]
+    O14["Fuel reserve protection"]
+    O15["Zone 1 shed equals zero"]
+    O16["Zone 3 shed before Zone 2"]
+    O17["Heat balance"]
+    O18["Fuel, starts, wet-stacking and shed penalties"]
+    O1 --> O2 --> O3 --> O4
+    O5 --> O10
+    O6 --> O10
+    O7 --> O10
+    O8 --> O10
+    O9 --> O17
+    O10 --> O11 --> O12 --> O13 --> O14 --> O15 --> O16 --> O17 --> O18
+  end
+
+  subgraph Protection["Fallback and Protection"]
+    PF1["Deterministic fallback policy"]
+    PF2["Stale forecast trigger"]
+    PF3["Invalid sensor trigger"]
+    PF4["Solver failure trigger"]
+    PF5["Zone guard"]
+    PF6["Zone 1 never shed"]
+    PF7["Alert engine"]
+    PF8["Fuel reserve breach"]
+    PF9["Low genset load"]
+    PF10["Battery cold limit"]
+    PF11["Reserve shortfall"]
+    PF12["Sensor dropout"]
+    PF13["Forecast disagreement"]
+    PF1 --> PF5 --> PF6
+    PF2 --> PF1
+    PF3 --> PF1
+    PF4 --> PF1
+    PF7 --> PF8
+    PF7 --> PF9
+    PF7 --> PF10
+    PF7 --> PF11
+    PF7 --> PF12
+    PF7 --> PF13
+  end
+
+  subgraph Baseline["Baseline Comparison"]
+    B1["Realistic rule-based operator policy"]
+    B2["Minimum gensets plus reserve"]
+    B3["Threshold-based unit addition"]
+    B4["Threshold-based unit removal"]
+    B5["Battery charge from surplus only"]
+    B6["Zone 3 then Zone 2 shedding"]
+    B7["ASSUMED thresholds documented"]
+    B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7
+  end
+
+  subgraph Scenarios["Editable Scenarios"]
+    SC1["Polar night"]
+    SC2["Blizzard"]
+    SC3["Wind lull"]
+    SC4["Generator fault"]
+    SC5["Late resupply"]
+    SC6["Sensor dropout"]
+    SC7["Stale forecast"]
+    SC8["Cold snap"]
+    SC9["With renewables"]
+    SC10["Without renewables"]
+    SC11["Multiple seeds"]
+  end
+
+  subgraph Metrics["Computed Run Metrics"]
+    M1["Diesel litres"]
+    M2["Zone 1 unserved energy"]
+    M3["Zone 2 unserved energy"]
+    M4["Zone 3 unserved energy"]
+    M5["Wet-stacking time"]
+    M6["Genset starts"]
+    M7["Minimum battery SoC"]
+    M8["Minimum fuel margin"]
+    M9["Forecast error versus persistence"]
+    M10["Fallback activations"]
+    M11["Mean and min-max ranges"]
+    M12["Sensitivity to ASSUMED parameters"]
+  end
+
+  subgraph Reports["Reports and Audit"]
+    RP1["SIMULATED and ASSUMED INPUTS on every page"]
+    RP2["Baseline versus optimizer"]
+    RP3["Scenario and seed ranges"]
+    RP4["PDF export"]
+    RP5["CSV export"]
+    RP6["Optional CO2 difference only"]
+    RP7["Emission factor tagged ASSUMED"]
+    AU1["Append-only audit log"]
+    AU2["Inputs and provenance"]
+    AU3["Forecasts and plans"]
+    AU4["Advisory and operator action"]
+    AU5["Timestamps"]
+    AU1 --> AU2
+    AU1 --> AU3
+    AU1 --> AU4
+    AU1 --> AU5
+  end
+
+  subgraph Dashboard["Light Theme Dashboard"]
+    UI1["Overview"]
+    UI2["Forecast"]
+    UI3["Plan"]
+    UI4["Scenarios"]
+    UI5["Audit"]
+    UI6["Config and provenance"]
+    UI7["Limitations"]
+    UI8["SSE updates every 2 seconds"]
+    UI9["Generation mix"]
+    UI10["Battery SoC"]
+    UI11["Load by zone"]
+    UI12["Fuel margin"]
+    UI13["Active alerts"]
+    UI14["Advisory Accept or Reject"]
+    UI15["P10-P90 forecast bands"]
+    UI16["Genset Gantt"]
+    UI17["SoC curve and heat balance"]
+    UI18["Binding constraints"]
+    UI19["Parameter tags"]
+    UI20["REAL upload"]
+    UI21["Keyboard accessible"]
+    UI22["High contrast"]
+    UI23["No decorative animation"]
+    UI1 --> UI8
+    UI1 --> UI9
+    UI1 --> UI10
+    UI1 --> UI11
+    UI1 --> UI12
+    UI1 --> UI13
+    UI1 --> UI14
+    UI2 --> UI15
+    UI3 --> UI16
+    UI3 --> UI17
+    UI3 --> UI18
+    UI6 --> UI19
+    UI6 --> UI20
+    UI7 --> UI21
+    UI7 --> UI22
+    UI7 --> UI23
+  end
+
+  subgraph Tests["Required Tests"]
+    TST1["Zone 1 never shed"]
+    TST2["Power balance tolerance"]
+    TST3["Battery temperature and SoC bounds"]
+    TST4["Genset min up and down"]
+    TST5["Fuel reserve protection"]
+    TST6["Fallback triggers"]
+    TST7["Forecast persistence fallback"]
+    TST8["No hardcoded numeric savings"]
+    TST9["Fixed-seed reproducibility"]
+    TST10["Forced failure audit entry"]
+  end
+
+  subgraph Deliverables["Acceptance Demo"]
+    DL1["docker compose"]
+    DL2["README run steps"]
+    DL3["ASSUMPTIONS.md"]
+    DL4["LIMITATIONS.md"]
+    DL5["Load Maitri config"]
+    DL6["Run polar-night scenario"]
+    DL7["Compare ranges"]
+    DL8["Force sensor failure"]
+    DL9["Show fallback and audit"]
+  end
+
+  Stack --> Config
+  Config --> Data
+  Data --> Pipeline
+  Pipeline --> Validation
+  Pipeline --> Prediction
+  Prediction --> Optimizer
+  Optimizer --> Protection
+  Protection --> Metrics
+  Baseline --> Metrics
+  Scenarios --> Baseline
+  Scenarios --> Optimizer
+  Metrics --> Reports
+  Reports --> Dashboard
+  Dashboard --> Tests
+  Tests --> Deliverables
+  Principles --> Config
+  Principles --> Pipeline
+  Principles --> Reports
+  Principles --> Dashboard
+  DL1 --> DL5 --> DL6 --> DL7 --> DL8 --> DL9

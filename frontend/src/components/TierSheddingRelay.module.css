@@ -1,0 +1,180 @@
+/* TierSheddingRelay — industrial + scientific light theme with clean color cues */
+
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background: var(--green);
+  border-radius: 2px;
+}
+
+.tiersGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.tierCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(23, 32, 29, 0.04);
+}
+
+.tier1Card {
+  border-left-color: var(--green);
+}
+
+.tier2Card {
+  border-left-color: var(--blue);
+}
+
+.tier3Card {
+  border-left-color: var(--amber);
+}
+
+.tierName {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-ui);
+}
+
+.tierStatus {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.70rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  width: fit-content;
+  font-family: var(--font-mono);
+}
+
+.badgeGreen {
+  background: var(--green-light);
+  color: var(--green);
+  border: 1px solid #C4DED6;
+}
+
+.badgeBlue {
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1px solid #D1E5F1;
+}
+
+.badgeAmber {
+  background: var(--amber-light);
+  color: #9E6B18;
+  border: 1px solid #F5DEB3;
+}
+
+.arrow {
+  font-weight: 700;
+}
+
+.econGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.econCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 1px 2px rgba(23, 32, 29, 0.03);
+}
+
+.econLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-ui);
+}
+
+.econValue {
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+}
+
+.econGreen {
+  color: var(--green);
+}
+
+.econTeal {
+  color: var(--teal);
+}
+
+.econBlue {
+  color: var(--blue);
+}
+
+.econSlate {
+  color: var(--data-grid);
+}
+
+.footnote {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 6px;
+}
+
+@media (max-width: 900px) {
+  .tiersGrid {
+    grid-template-columns: 1fr;
+  }
+  .econGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

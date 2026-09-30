@@ -1,0 +1,181 @@
+/* HourlyScheduleTable — dense scientific data table, industrial light with crisp data colors */
+
+.container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background: var(--green);
+  border-radius: 2px;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.table thead {
+  position: sticky;
+  top: 0;
+  background: #E5ECE7;
+  z-index: 2;
+}
+
+.table th {
+  padding: 8px 12px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.thIndex {
+  width: 40px;
+  text-align: center;
+}
+
+.thTime {
+  min-width: 130px;
+}
+
+.tr {
+  transition: background-color 0.1s;
+}
+
+.tr:hover {
+  background-color: var(--bg-subtle);
+}
+
+.table td {
+  padding: 7px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid #E8EDE9;
+  white-space: nowrap;
+}
+
+.tdIndex {
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.70rem;
+}
+
+.tdTime {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.tdNum {
+  text-align: right;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Semantic Data Column Tints */
+.colSolar {
+  color: #A36F17;
+  font-weight: 600;
+}
+
+.colWind {
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.colDiesel {
+  color: var(--data-grid);
+  font-weight: 500;
+}
+
+.colSoc {
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.colUnmetAlert {
+  color: var(--red);
+  background: var(--red-light);
+  font-weight: 700;
+  border-radius: 2px;
+}
+
+.colUnmetZero {
+  color: var(--text-tertiary);
+}
+
+.actionRow {
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Primary Action Button: Solid Arctic Green */
+.csvBtn {
+  background: var(--green);
+  border: 1px solid var(--green-dark);
+  color: #FFFFFF;
+  font-size: 0.76rem;
+  font-weight: 600;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(23, 74, 69, 0.2);
+}
+
+.csvBtn:hover {
+  background: var(--green-dark);
+  box-shadow: 0 2px 5px rgba(23, 74, 69, 0.3);
+  transform: translateY(-1px);
+}
+
+.csvBtnSuccess {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #FFFFFF;
+}
