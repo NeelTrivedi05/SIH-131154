@@ -6,6 +6,7 @@ import DispatchStackChart from './components/DispatchStackChart';
 import BatterySocChart from './components/BatterySocChart';
 import DieselExplainer from './components/DieselExplainer';
 import TierSheddingRelay from './components/TierSheddingRelay';
+import { AlertPanel } from './components/AlertPanel';
 import HourlyScheduleTable from './components/HourlyScheduleTable';
 import { calculateSimulation } from './lib/simulationEngine';
 import styles from './App.module.css';
@@ -83,6 +84,7 @@ export default function App() {
               statusTag: json.economics.status_tag || 'SIMULATED, ASSUMED INPUTS',
             },
             explainer: json.explainer,
+            alerts: json.alerts || [],
             schedule: json.schedule.map((s, i) => ({
               ...s,
               timeShort: s.time_short || s.time.slice(11, 16),
@@ -190,6 +192,9 @@ export default function App() {
           tiers={sim.tiers}
           economics={sim.economics}
         />
+
+        {/* Real-time system & weather alerts with dynamic severity */}
+        <AlertPanel alerts={sim.alerts || []} />
 
         {/* Hourly schedule data table with Download CSV Button */}
         <HourlyScheduleTable

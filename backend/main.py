@@ -19,10 +19,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette.responses import StreamingResponse
 import os
 
-from simulator import get_current_readings
-from forecaster import get_forecast
-from optimizer import get_dispatch_decision
 from twin_simulator import run_simulation
+from forecaster import get_model_metrics
 from pydantic import BaseModel
 from typing import Optional
 
@@ -51,29 +49,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Cumulative fuel savings tracker (resets on server restart — MVP simplification)
-_cumulative_savings = {"fuel_litres": 0.0, "cost_inr": 0.0}
-
 
 def _build_payload() -> dict:
-    """Build the complete data payload for a single tick."""
-    readings = get_current_readings()
-    forecast = get_forecast(readings)
-    dispatch = get_dispatch_decision(readings, forecast)
-
-    # Accumulate fuel savings
-    _cumulative_savings["fuel_litres"] += readings["economics"]["fuel_saved_lph"] / 1800.0  # per 2s tick
-    _cumulative_savings["cost_inr"] += readings["economics"]["cost_saved_inr_hr"] / 1800.0
-
-    return {
-        "readings": readings,
-        "forecast": forecast,
-        "dispatch": dispatch,
-        "cumulative": {
-            "fuel_saved_litres": round(_cumulative_savings["fuel_litres"], 3),
-            "cost_saved_inr": round(_cumulative_savings["cost_inr"], 2),
-        },
-    }
+    """Build the complete data payload from the single twin simulator."""
+    return run_simulation(station="maitri", preset="polar_night")
 
 
 @app.get("/health")
@@ -83,15 +62,15 @@ def health():
 
 @app.get("/api/status")
 def status():
-    """Single snapshot — useful for initial page load."""
+    """Single snapshot — powered by the single twin simulator."""
     return JSONResponse(content=_build_payload())
 
 
 @app.get("/api/forecast")
 def forecast_only():
-    """Just the forecast — for debugging."""
-    readings = get_current_readings()
-    return JSONResponse(content=get_forecast(readings))
+    """Load forecast from single twin simulator."""
+    sim = _build_payload()
+    return JSONResponse(content=sim["schedule"])
 
 
 @app.get("/api/simulate")
@@ -158,7 +137,6 @@ async def stream():
     )
 
 
-from forecaster import get_model_metrics
 
 @app.get("/api/model-metrics")
 def model_metrics():

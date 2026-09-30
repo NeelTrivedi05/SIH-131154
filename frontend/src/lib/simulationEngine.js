@@ -248,8 +248,8 @@ export function calculateSimulation({
     furlingNotice = `Turbine storm furling cut-out active at hour(s) ${furledSteps.slice(0, 3).join(', ')} (>25 m/s wind safety shut-down). `;
   }
 
-  const minSoc = Math.min(...schedule.map(s => s.soc));
-  const minSocPct = (minSoc / Math.max(batteryKwh, 1)) * 100;
+  const minObservedSoc = Math.min(...schedule.map(s => s.soc));
+  const minSocPct = (minObservedSoc / Math.max(batteryKwh, 1)) * 100;
   const alerts = [];
   if (furledSteps.length > 0) {
     alerts.push({
