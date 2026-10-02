@@ -8,6 +8,8 @@ FLOW.md
 HANDOVER.md
 ROLLBACK.md
 TEST_CHECKLIST.md
+CONTEXT.md
+MEMORY.md
 .agents/
 .cursor/
 .codex/

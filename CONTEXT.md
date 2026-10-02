@@ -97,28 +97,29 @@
 
 ## 4. Current Implementation Status
 
-### A. Working Codebase (`c:\Users\nttga\OneDrive\Documents\Desktop\SIH_anti\`)
+### A. Working Codebase
 1. **`.trace/` Management System**:
-   * All 8 standard files fully initialized and up-to-date: `ARCHITECTURE.md`, `CONSTRAINTS.md`, `DECISIONS.md` (6 ADRs logged), `FEATURE.md`, `FLOW.md`, `HANDOVER.md`, `ROLLBACK.md`, `TEST_CHECKLIST.md`.
-2. **Backend Engine (`backend/`)**:
-   * `simulator.py`: Physics simulator modeling seasonal solar declination, Weibull wind gusts, temperature-driven heating demand, and fuel consumption curves.
-   * `forecaster.py`: Ridge Regression prototype model forecasting 24-hour load based on lag features and ambient cold.
-   * `optimizer.py`: Merit-order rule engine, anti-wet-stacking logic, 6 alert triggers, and live fuel abatement accumulator.
-   * `main.py`: FastAPI async application streaming SSE telemetry every 2 seconds on `http://localhost:8000`.
-3. **Frontend Dashboard (`frontend/`)**:
-   * `index.html`: Responsive semantic dashboard designed for rugged touchscreens.
-   * `style.css`: High-contrast dark theme with ice-blue (`#00E5FF`) and aurora-teal (`#00E676`) telemetry accents.
-   * `app.js`: SSE EventSource listener dynamically feeding 4 live Chart.js graphs (Power Mix Doughnut, Zone Breakdown Bar, 24h Load vs Generation Timeline, and Real-Time Alert Ticker).
+   * All 8 standard files fully initialized and up-to-date: `ARCHITECTURE.md`, `CONSTRAINTS.md`, `DECISIONS.md`, `FEATURE.md`, `FLOW.md`, `HANDOVER.md`, `ROLLBACK.md`, `TEST_CHECKLIST.md`.
+2. **Backend Engine (`backend/`)** — Single Unified Simulator:
+   * `twin_simulator.py`: Single source-of-truth physics-grounded microgrid advisory dispatch engine — 120 kW genset [ASSUMED] with 55% anti-wet-stacking clamp (66 kW floor), 50 kW wind turbine with 25 m/s storm furling cut-out, dynamic 3-tier priority load shedding, rule-based heuristic baseline comparison.
+   * `forecaster.py`: Real Scikit-Learn `Ridge(alpha=1.0)` model fitted on synthetic polar load series with chronological 80/20 train/test split. Measured test MAE: **1.75 kW** vs **2.96 kW** 24h persistence baseline (+40.9% improvement).
+   * `main.py`: FastAPI server with REST (`/api/simulate`, `/api/status`, `/api/forecast`, `/api/model-metrics`) and SSE (`/api/stream`) endpoints, mounting `frontend/dist` as static files.
+3. **Frontend Dashboard (`frontend/`)** — React 19 + Vite:
+   * `App.jsx`: Main command center coordinator with dual-engine architecture (fast local `simulationEngine.js` for 60fps slider scrubbing + backend sync via `/api/simulate`).
+   * CSS Modules with industrial scientific light theme (`#EBF0ED` background, `#174A45` primary green, `#D99A2B` energy accent, `#17201D` text).
+   * Recharts-based visualizations: Load Forecast, Dispatch Stack, Battery SoC Trajectory, Energy Mix, Tier Shedding Relay, Alert Panel, and Hourly Schedule Table with CSV export.
+   * All metrics labeled honestly: forecast = "Synthetic demo forecast", savings tagged `SIMULATED, ASSUMED INPUTS`, genset spec tagged `[ASSUMED]`.
 4. **PowerPoint Presentation Deck**:
    * File: `PolarGrid_AI_SIH2026_Submission.pptx` (saved in root and `media/`).
-   * Structure: 6 official slides matching the AICTE/SIH template (`media/1674_SIH2024.pptx (2).pdf`).
-   * Design: 100% native editable PowerPoint shapes, 12 custom polar microgrid domain icons, official SIH 2026 branding, verified academic literature matrix citing NCPOR, MDPI, WMO, and IEEE.
+   * All ungrounded claims (Kalman, Modbus, SQLite, thermal hysteresis, heat recovery, CPU/RAM benchmarks) labeled as `[Roadmap]`.
+   * Reframed as Advisory Decision Support with human-in-the-loop engineering.
 
 ---
 
-## 5. Verified Quantifiable Impact Metrics
-* **Fuel Abatement**: **35,000 to 48,000 Litres of ATF-50 saved annually** per station (18% to 22% reduction).
-* **Direct Logistics Savings**: **₹50 Lakhs to ₹80 Lakhs ($60k–$96k USD)** saved annually per station in polar icebreaker freight.
-* **Carbon Mitigation**: **95 to 130 Metric Tonnes of CO₂e** abated per year.
-* **Engine Longevity**: Extends diesel generator major overhaul intervals from **5,000 to 8,500 hours** by avoiding low-load wet-stacking.
-* **Human Safety**: Guaranteed zero blackout to Zone 1 life-support modules during polar blizzards.
+## 5. Measured & Estimated Impact Metrics [SIMULATED, ASSUMED INPUTS]
+
+> **Note**: All savings below are computed dynamically by the simulator against a standard uncoordinated rule-based genset-following policy (not naive diesel-only). Values are estimated seasonal ranges based on synthetic scenarios.
+
+* **Forecast Accuracy (Measured on Test Split)**: Ridge model MAE **1.75 kW** vs persistence baseline **2.96 kW** (40.9% improvement).
+* **Fuel Savings Estimate**: Dynamic range depending on scenario — typically **8%–16%** vs rule-based policy, projected **18,000 – 38,000 L/yr** seasonal range.
+* **Human Safety**: Zone 1 life-support loads protected via deterministic 3-tier priority shedding relay during blizzard scenarios.

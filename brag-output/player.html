@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PolarGrid AI — Launch Video Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #F4F6F5;
+      --card-bg: #FFFFFF;
+      --border: #D9DEDB;
+      --text-pri: #17201D;
+      --text-sec: #66706B;
+      --primary: #174A45;
+      --dark: #103B37;
+      --amber: #D99A2B;
+      --coral: #B65C3A;
+      --battery: #357A6B;
+      --solar: #C58A24;
+      --grid: #59635F;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0E1614;
+      color: #F4F6F5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #172623;
+      padding: 14px 24px;
+      border-radius: 8px;
+      border: 1px solid #233B36;
+    }
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      color: #EBF2EF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-badge {
+      background: var(--primary);
+      color: #FFF;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .viewport {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #2A4540;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+    .viewport img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .viewport img.active {
+      opacity: 1;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #172623;
+      padding: 16px 24px;
+      border-radius: 8px;
+      border: 1px solid #233B36;
+      gap: 20px;
+    }
+    .timeline {
+      flex: 1;
+      height: 6px;
+      background: #253D38;
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--amber);
+      border-radius: 3px;
+      transition: width 0.1s linear;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      background: var(--primary);
+      color: #FFF;
+      border: 1px solid #2A6E67;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #1F5F58;
+    }
+    button.sec {
+      background: transparent;
+      border-color: #345750;
+      color: #A3BFB8;
+    }
+    button.sec:hover {
+      background: #1F3632;
+      color: #FFF;
+    }
+    .time-display {
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: #A3BFB8;
+      min-width: 90px;
+      text-align: right;
+    }
+    .scene-tags {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .scene-pill {
+      font-size: 0.72rem;
+      font-family: monospace;
+      padding: 6px 12px;
+      background: #152220;
+      border: 1px solid #243B36;
+      border-radius: 4px;
+      color: #8CA8A1;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .scene-pill.active {
+      background: var(--primary);
+      border-color: var(--amber);
+      color: #FFF;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-bar">
+    <div class="brand-title">
+      <span>POLARGRID AI</span>
+      <span class="brand-badge">SIH26061 LAUNCH DEMO</span>
+    </div>
+    <div style="font-size: 0.8rem; color: #8CA8A1; font-family: monospace;">
+      1080p 16:9 · 24.0s STORYBOARD
+    </div>
+  </div>
+
+  <div class="viewport" id="viewport">
+    <img id="scene1" src="work/scene_1.png" class="active" alt="Scene 1: Polar Crucible">
+    <img id="scene2" src="work/scene_2.png" alt="Scene 2: Command Center">
+    <img id="scene3" src="work/scene_3.png" alt="Scene 3: Machine Learning Rigor">
+    <img id="scene4" src="work/scene_4.png" alt="Scene 4: Storm Furling">
+    <img id="scene5" src="work/scene_5.png" alt="Scene 5: 3-Tier Shedding & Economics">
+    <img id="scene6" src="work/scene_6.png" alt="Scene 6: Outro">
+  </div>
+
+  <div class="scene-tags">
+    <div class="scene-pill active" onclick="jumpTo(0)">01 · Polar Crucible (0s)</div>
+    <div class="scene-pill" onclick="jumpTo(3)">02 · Command Center (3s)</div>
+    <div class="scene-pill" onclick="jumpTo(7)">03 · ML Ridge Benchmark (7s)</div>
+    <div class="scene-pill" onclick="jumpTo(12)">04 · Storm Furling & Clamp (12s)</div>
+    <div class="scene-pill" onclick="jumpTo(18)">05 · 3-Tier & Fuel Delta (18s)</div>
+    <div class="scene-pill" onclick="jumpTo(21.5)">06 · Mission Ready (21.5s)</div>
+  </div>
+
+  <div class="controls">
+    <div class="btn-group">
+      <button id="playBtn" onclick="togglePlay()">▶ Play Launch Video</button>
+      <button class="sec" onclick="resetVideo()">↺ Replay</button>
+    </div>
+
+    <div class="timeline" onclick="seek(event)">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="time-display" id="timeDisplay">00:00 / 00:24</div>
+  </div>
+</div>
+
+<script>
+  const DURATION = 24.0;
+  const scenes = [
+    { id: 'scene1', start: 0.0, end: 3.0 },
+    { id: 'scene2', start: 3.0, end: 7.0 },
+    { id: 'scene3', start: 7.0, end: 12.0 },
+    { id: 'scene4', start: 12.0, end: 18.0 },
+    { id: 'scene5', start: 18.0, end: 21.5 },
+    { id: 'scene6', start: 21.5, end: 24.0 }
+  ];
+
+  let currentTime = 0;
+  let isPlaying = false;
+  let lastTimestamp = null;
+
+  function updateDisplay() {
+    const pct = (currentTime / DURATION) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+    
+    const curSec = Math.floor(currentTime);
+    const durSec = Math.floor(DURATION);
+    document.getElementById('timeDisplay').innerText = 
+      `00:${curSec < 10 ? '0' : ''}${curSec} / 00:${durSec}`;
+
+    scenes.forEach((s, idx) => {
+      const el = document.getElementById(s.id);
+      const pill = document.querySelectorAll('.scene-pill')[idx];
+      if (currentTime >= s.start && currentTime < s.end) {
+        el.classList.add('active');
+        pill.classList.add('active');
+      } else {
+        el.classList.remove('active');
+        pill.classList.remove('active');
+      }
+    });
+  }
+
+  function loop(timestamp) {
+    if (!isPlaying) return;
+    if (!lastTimestamp) lastTimestamp = timestamp;
+    const delta = (timestamp - lastTimestamp) / 1000;
+    lastTimestamp = timestamp;
+
+    currentTime += delta;
+    if (currentTime >= DURATION) {
+      currentTime = DURATION;
+      isPlaying = false;
+      document.getElementById('playBtn').innerText = '↺ Replay Video';
+    }
+    updateDisplay();
+    if (isPlaying) requestAnimationFrame(loop);
+  }
+
+  function togglePlay() {
+    if (isPlaying) {
+      isPlaying = false;
+      document.getElementById('playBtn').innerText = '▶ Resume';
+    } else {
+      if (currentTime >= DURATION) currentTime = 0;
+      isPlaying = true;
+      lastTimestamp = null;
+      document.getElementById('playBtn').innerText = '⏸ Pause';
+      requestAnimationFrame(loop);
+    }
+  }
+
+  function resetVideo() {
+    currentTime = 0;
+    updateDisplay();
+    if (!isPlaying) {
+      togglePlay();
+    }
+  }
+
+  function jumpTo(sec) {
+    currentTime = sec;
+    updateDisplay();
+  }
+
+  function seek(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    currentTime = ratio * DURATION;
+    updateDisplay();
+  }
+
+  updateDisplay();
+</script>
+
+</body>
+</html>

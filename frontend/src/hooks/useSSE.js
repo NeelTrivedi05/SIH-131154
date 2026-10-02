@@ -5,9 +5,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-// Use relative URL in dev (Vite proxies /api → http://localhost:8000)
-// In production, point directly at FastAPI host
-const API_BASE = import.meta.env.DEV ? '' : 'http://localhost:8000';
+// Use relative URL by default (works in dev with Vite proxy & in production when served by FastAPI)
+// Or override with VITE_API_URL if frontend and backend are hosted on separate domains
+const API_BASE = import.meta.env.VITE_API_URL || '';
 const RECONNECT_DELAY = 3000;
 
 export function useSSE() {

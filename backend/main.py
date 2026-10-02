@@ -10,6 +10,11 @@ Endpoints:
   GET /health        → Health check
 """
 
+import traceback
+import logging
+
+logger = logging.getLogger("polargrid")
+
 import asyncio
 import json
 from fastapi import FastAPI
@@ -63,14 +68,22 @@ def health():
 @app.get("/api/status")
 def status():
     """Single snapshot — powered by the single twin simulator."""
-    return JSONResponse(content=_build_payload())
+    try:
+        return JSONResponse(content=_build_payload())
+    except Exception as exc:
+        logger.exception("Error in /api/status")
+        return JSONResponse(status_code=500, content={"error": str(exc)})
 
 
 @app.get("/api/forecast")
 def forecast_only():
     """Load forecast from single twin simulator."""
-    sim = _build_payload()
-    return JSONResponse(content=sim["schedule"])
+    try:
+        sim = _build_payload()
+        return JSONResponse(content=sim["schedule"])
+    except Exception as exc:
+        logger.exception("Error in /api/forecast")
+        return JSONResponse(status_code=500, content={"error": str(exc)})
 
 
 @app.get("/api/simulate")
@@ -84,31 +97,39 @@ def simulate_get(
     wind_multiplier: float = 1.0,
 ):
     """Run full microgrid scenario simulation (GET)."""
-    result = run_simulation(
-        station=station,
-        preset=preset,
-        forecast_horizon=forecast_horizon,
-        battery_kwh=battery_kwh,
-        battery_kw=battery_kw,
-        fuel_rs_l=fuel_rs_l,
-        wind_multiplier=wind_multiplier,
-    )
-    return JSONResponse(content=result)
+    try:
+        result = run_simulation(
+            station=station,
+            preset=preset,
+            forecast_horizon=forecast_horizon,
+            battery_kwh=max(1.0, battery_kwh),
+            battery_kw=max(1.0, battery_kw),
+            fuel_rs_l=max(0.01, fuel_rs_l),
+            wind_multiplier=max(0.0, wind_multiplier),
+        )
+        return JSONResponse(content=result)
+    except Exception as exc:
+        logger.exception("Error in GET /api/simulate")
+        return JSONResponse(status_code=500, content={"error": str(exc)})
 
 
 @app.post("/api/simulate")
 def simulate_post(req: SimulationRequest):
     """Run full microgrid scenario simulation (POST)."""
-    result = run_simulation(
-        station=req.station or "maitri",
-        preset=req.preset or "polar_night",
-        forecast_horizon=req.forecast_horizon or 24,
-        battery_kwh=req.battery_kwh or 300.0,
-        battery_kw=req.battery_kw or 60.0,
-        fuel_rs_l=req.fuel_rs_l or 160.0,
-        wind_multiplier=req.wind_multiplier or 1.0,
-    )
-    return JSONResponse(content=result)
+    try:
+        result = run_simulation(
+            station=req.station or "maitri",
+            preset=req.preset or "polar_night",
+            forecast_horizon=req.forecast_horizon or 24,
+            battery_kwh=max(1.0, req.battery_kwh or 300.0),
+            battery_kw=max(1.0, req.battery_kw or 60.0),
+            fuel_rs_l=max(0.01, req.fuel_rs_l or 160.0),
+            wind_multiplier=max(0.0, req.wind_multiplier or 1.0),
+        )
+        return JSONResponse(content=result)
+    except Exception as exc:
+        logger.exception("Error in POST /api/simulate")
+        return JSONResponse(status_code=500, content={"error": str(exc)})
 
 
 
@@ -117,11 +138,17 @@ async def _event_generator():
     Async generator for Server-Sent Events.
     Emits a new data packet every 2 seconds.
     """
-    while True:
-        payload = _build_payload()
-        # SSE format: data: <json>\n\n
-        yield f"data: {json.dumps(payload)}\n\n"
-        await asyncio.sleep(2)
+    try:
+        while True:
+            try:
+                payload = _build_payload()
+                yield f"data: {json.dumps(payload)}\n\n"
+            except Exception as exc:
+                error_payload = {"error": str(exc)}
+                yield f"data: {json.dumps(error_payload)}\n\n"
+            await asyncio.sleep(2)
+    except asyncio.CancelledError:
+        return
 
 
 @app.get("/api/stream")
@@ -141,8 +168,17 @@ async def stream():
 @app.get("/api/model-metrics")
 def model_metrics():
     """Return verified Scikit-Learn model metrics on test set."""
-    return JSONResponse(content=get_model_metrics())
+    try:
+        return JSONResponse(content=get_model_metrics())
+    except Exception as exc:
+        logger.exception("Error in /api/model-metrics")
+        return JSONResponse(status_code=500, content={"error": str(exc)})
 
+
+# Mount sih_video_3min directory for video generator studio
+_video_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sih_video_3min"))
+if os.path.isdir(_video_dir):
+    app.mount("/sih-video", StaticFiles(directory=_video_dir, html=True), name="sih-video")
 
 # Mount frontend/dist static files if built, fallback to frontend/
 _dist_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
@@ -156,7 +192,9 @@ elif os.path.isdir(_frontend_dir):
 
 if __name__ == "__main__":
     import uvicorn
-    print("🧊 PolarGrid AI — Starting server...")
-    print("📊 Dashboard: http://localhost:8000")
-    print("📡 API Docs:  http://localhost:8000/docs")
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.environ.get("PORT", 8000))
+    print(f"[PolarGrid AI] Starting server on port {port}...")
+    print(f"[PolarGrid AI] Dashboard: http://localhost:{port}")
+    print(f"[PolarGrid AI] API Docs:  http://localhost:{port}/docs")
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
+

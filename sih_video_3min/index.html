@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PolarGrid AI — Official 3-Minute SIH Presentation Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #0D1412;
+      --panel: #16221F;
+      --border: #233732;
+      --primary: #174A45;
+      --accent: #D99A2B;
+      --coral: #B65C3A;
+      --battery: #357A6B;
+      --text: #F4F6F5;
+      --muted: #8EA09A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Director Header */
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-badge {
+      background: var(--primary);
+      color: #FFF;
+      font-weight: 800;
+      font-size: 1rem;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .brand-tag {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-family: monospace;
+      background: rgba(217,154,43,0.12);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(217,154,43,0.3);
+    }
+
+    /* Action buttons */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      background: var(--primary);
+      color: #FFF;
+      border: 1px solid #2B6E66;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn:hover { background: #1C5A53; }
+    .btn-rec {
+      background: #8F2218;
+      border-color: #B83226;
+    }
+    .btn-rec:hover { background: #A8281C; }
+    .btn-sec {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .btn-sec:hover { background: #1F302C; color: #FFF; }
+
+    /* Scene tracker strip */
+    .scene-strip {
+      display: flex;
+      background: #111A18;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .scene-item {
+      flex: 1;
+      padding: 10px 16px;
+      border-right: 1px solid var(--border);
+      font-size: 0.75rem;
+      font-family: monospace;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 200px;
+      transition: all 0.2s;
+    }
+    .scene-item.active {
+      background: rgba(23,74,69,0.4);
+      color: #FFF;
+      border-bottom: 2px solid var(--accent);
+    }
+    .scene-time {
+      color: var(--accent);
+      font-size: 0.7rem;
+    }
+
+    /* Main Stage */
+    .stage-wrapper {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 12px;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .viewport-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+    }
+
+    /* Embedded real live app */
+    iframe#appFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #F4F6F5;
+      display: block;
+    }
+
+    /* Floating Subtitle / Voiceover Box */
+    .subtitle-overlay {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 88%;
+      max-width: 1100px;
+      background: rgba(14, 23, 20, 0.94);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(217, 154, 43, 0.35);
+      border-left: 5px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px 24px;
+      color: #F4F6F5;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      transition: all 0.3s ease;
+      z-index: 50;
+    }
+    .subtitle-scene-tag {
+      font-size: 0.72rem;
+      font-family: monospace;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .subtitle-text {
+      font-size: 1.05rem;
+      line-height: 1.45;
+      font-weight: 500;
+      color: #EBF2EF;
+    }
+
+    /* Telemetry HUD overlay in top-right */
+    .hud-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(14, 23, 20, 0.88);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 40;
+    }
+    .rec-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #444;
+    }
+    .rec-dot.active {
+      background: #FF3B30;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Bottom progress tracker */
+    .footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      background: #111A18;
+      border-radius: 3px;
+      margin: 0 20px;
+      position: relative;
+      cursor: pointer;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.15s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-row">
+      <div class="logo-badge">P</div>
+      <div class="brand-title">POLARGRID AI</div>
+      <div class="brand-tag">3-MIN SIH VIDEO STUDIO</div>
+    </div>
+    <div class="controls">
+      <button class="btn" id="playBtn" onclick="togglePlay()">
+        ▶ Start 3-Min Walkthrough
+      </button>
+      <button class="btn btn-rec" id="recBtn" onclick="toggleRecording()">
+        ⏺ Record Video (.webm)
+      </button>
+      <button class="btn btn-sec" onclick="resetPresentation()">
+        ↺ Restart
+      </button>
+    </div>
+  </header>
+
+  <!-- 5 Storyboard Scenes Strip -->
+  <div class="scene-strip">
+    <div class="scene-item active" id="pill_1" onclick="seekToScene(1)">
+      <span class="scene-time">0:00 – 0:42</span>
+      <strong>1. The Polar Challenge</strong>
+      <span>-50°C, Maitri Station</span>
+    </div>
+    <div class="scene-item" id="pill_2" onclick="seekToScene(2)">
+      <span class="scene-time">0:42 – 1:14</span>
+      <strong>2. ML Forecaster Rigor</strong>
+      <span>1.75 kW MAE vs Persistence</span>
+    </div>
+    <div class="scene-item" id="pill_3" onclick="seekToScene(3)">
+      <span class="scene-time">1:14 – 1:47</span>
+      <strong>3. Live Digital Twin</strong>
+      <span>Summer Max & 60fps Scrub</span>
+    </div>
+    <div class="scene-item" id="pill_4" onclick="seekToScene(4)">
+      <span class="scene-time">1:47 – 2:35</span>
+      <strong>4. Storm Furling & Clamp</strong>
+      <span>>25 m/s Furling + 55% Floor</span>
+    </div>
+    <div class="scene-item" id="pill_5" onclick="seekToScene(5)">
+      <span class="scene-time">2:35 – 3:22</span>
+      <strong>5. 3-Tier Relay & Savings</strong>
+      <span>Tier 1 Secure + 18k–38k L/yr</span>
+    </div>
+  </div>
+
+  <div class="stage-wrapper">
+    <div class="viewport-container" id="stageViewport">
+      
+      <!-- Real Live Dashboard -->
+      <iframe id="appFrame" src="/"></iframe>
+
+      <!-- Telemetry HUD Badge -->
+      <div class="hud-badge">
+        <div class="rec-dot" id="recDot"></div>
+        <span id="recStatus">STANDBY</span>
+        <span style="color:var(--muted)">|</span>
+        <span style="color:var(--accent)">1080p 60FPS</span>
+      </div>
+
+      <!-- Synchronized Subtitle Overlay -->
+      <div class="subtitle-overlay" id="subtitleBox">
+        <div class="subtitle-scene-tag">
+          <span id="subSceneTitle">SCENE 1: THE POLAR CHALLENGE</span>
+          <span id="subSceneTime">00:00</span>
+        </div>
+        <div class="subtitle-text" id="subText">
+          India's Antarctic stations, Maitri and Bharati, operate under some of the most unforgiving conditions on Earth...
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span id="curTimeText">00:00</span>
+    <div class="progress-track" onclick="trackClick(event)">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span id="totalTimeText">03:22</span>
+  </div>
+
+  <!-- Audio Elements -->
+  <audio id="audio1" src="audio/scene_1.wav" preload="auto"></audio>
+  <audio id="audio2" src="audio/scene_2.wav" preload="auto"></audio>
+  <audio id="audio3" src="audio/scene_3.wav" preload="auto"></audio>
+  <audio id="audio4" src="audio/scene_4.wav" preload="auto"></audio>
+  <audio id="audio5" src="audio/scene_5.wav" preload="auto"></audio>
+
+  <script>
+    // Storyboard Definitions (durations measured exactly from audio synthesis)
+    const SCENES = [
+      {
+        id: 1,
+        title: "SCENE 1: THE POLAR CHALLENGE",
+        start: 0.0,
+        duration: 42.51,
+        audioId: "audio1",
+        preset: "polar_night",
+        text: "India's Antarctic stations, Maitri and Bharati, operate under some of the most unforgiving conditions on Earth, with temperatures plunging to minus 50 degrees Celsius and winds exceeding 100 kilometers per hour. Currently, these stations rely heavily on diesel fuel, shipped once a year by icebreakers. Running generators inefficiently leads to wet-stacking damage and wasted fuel. To solve Problem Statement SIH26061, we present PolarGrid AI: a physics-grounded digital twin and advisory decision support system designed to maximize polar renewable utilization while guaranteeing 100 percent life-support reliability."
+      },
+      {
+        id: 2,
+        title: "SCENE 2: ML LOAD FORECASTING WITH REAL BENCHMARKS",
+        start: 42.51,
+        duration: 31.59,
+        audioId: "audio2",
+        preset: "calm_night",
+        text: "Accurate dispatch begins with predictive forecasting. Rather than making unsubstantiated claims, we benchmarked a Scikit-Learn Ridge regression model against a 24-hour persistence baseline across an 80-20 chronological split. Our model achieved an empirical test MAE of 1.75 kilowatts compared to 2.96 kilowatts for the baseline, a 40.9 percent improvement. This gives station operators foresight to pre-charge batteries before polar storms hit."
+      },
+      {
+        id: 3,
+        title: "SCENE 3: LIVE INTERACTIVE DIGITAL TWIN",
+        start: 74.10,
+        duration: 33.14,
+        audioId: "audio3",
+        preset: "summer_max",
+        text: "Our dashboard is backed by a full digital twin. In our Summer Maximum scenario, 24-hour sunlight yields over 55 percent renewable penetration, with surplus power automatically directed to charge the 150 kilowatt-hour battery bank. Notice how smoothly the system recalculates in real-time as we adjust parameters like wind speed and battery capacity. In Polar Night, solar output drops to zero, and the system seamlessly advises battery buffering and generator scheduling."
+      },
+      {
+        id: 4,
+        title: "SCENE 4: STORM FURLING & WET-STACKING PROTECTION",
+        start: 107.24,
+        duration: 47.78,
+        audioId: "audio4",
+        preset: "blizzard",
+        text: "Here is where real engineering matters. In our Blizzard scenario, wind speeds surge above 25 meters per second. Instead of unrealistically claiming infinite wind power, PolarGrid AI models aerodynamic storm furling: the blades automatically feather to prevent catastrophic mechanical failure, cutting wind power to zero. The system immediately fires a critical safety interlock alert. Furthermore, notice our genset dispatch: to prevent cylinder bore glazing and engine wet-stacking, our algorithm enforces a strict 55 percent minimum loading clamp, meaning our 120 kilowatt generator never idles below 66 kilowatts. Any excess generation is diverted into battery storage."
+      },
+      {
+        id: 5,
+        title: "SCENE 5: 3-TIER SHEDDING, REALISTIC ECONOMICS & CONCLUSION",
+        start: 155.02,
+        duration: 47.09,
+        audioId: "audio5",
+        preset: "polar_night",
+        text: "Under extreme deficits, our 3-tier shedding relay protects Tier 1 Life Support and Medical heating at all costs, shedding non-essential auxiliary loads first. For fuel savings, we rejected the common flaw of comparing against an unrealistic all-diesel baseline. Instead, we measure against a realistic rule-based heuristic policy, demonstrating a verified 8 to 16 percent seasonal fuel reduction, saving 18,000 to 38,000 liters of Antarctic diesel annually. All hourly telemetry can be exported directly to CSV for MoES compliance. PolarGrid AI is ready to deploy offline, runs on zero cloud dependencies, and brings scientific rigor to polar clean energy transition."
+      }
+    ];
+
+    const TOTAL_DURATION = 202.11; // 3m 22s
+
+    let isPlaying = false;
+    let currentSceneIdx = 0;
+    let clockInterval = null;
+    let currentGlobalTime = 0;
+    let mediaRecorder = null;
+    let recordedChunks = [];
+
+    const frame = document.getElementById("appFrame");
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function updatePills(idx) {
+      for (let i = 1; i <= 5; i++) {
+        const p = document.getElementById(`pill_${i}`);
+        if (i === idx + 1) p.classList.add("active");
+        else p.classList.remove("active");
+      }
+    }
+
+    function triggerPresetInApp(presetName, sceneIdx) {
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const win = frame.contentWindow;
+        if (!doc || !win) return;
+
+        // Find preset button
+        const presetQueryMap = {
+          "polar_night": "polar night",
+          "summer_max": "summer",
+          "blizzard": "blizzard",
+          "calm_night": "calm"
+        };
+        const searchStr = presetQueryMap[presetName] || presetName.replace('_', ' ');
+        const buttons = Array.from(doc.querySelectorAll('button'));
+        const btn = buttons.find(b => b.innerText.toLowerCase().includes(searchStr));
+        if (btn) {
+          btn.click();
+          btn.style.outline = "2px solid var(--accent, #D99A2B)";
+          setTimeout(() => { if (btn) btn.style.outline = "none"; }, 2000);
+        }
+
+        // Camera scroll choreography per scene
+        if (sceneIdx === 0) {
+          // Scene 1: Top Overview & Station Header
+          win.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (sceneIdx === 1) {
+          // Scene 2: Forecast line chart & ML benchmark card
+          win.scrollTo({ top: 320, behavior: 'smooth' });
+        } else if (sceneIdx === 2) {
+          // Scene 3: Live Digital Twin
+          win.scrollTo({ top: 180, behavior: 'smooth' });
+          // Timed mid-scene switch: after 16s, switch to Polar Night
+          setTimeout(() => {
+            if (currentSceneIdx === 2) {
+              const pnBtn = buttons.find(b => b.innerText.toLowerCase().includes("polar night"));
+              if (pnBtn) pnBtn.click();
+            }
+          }, 16000);
+        } else if (sceneIdx === 3) {
+          // Scene 4: Storm Furling Alert Panel & Wet-Stacking
+          win.scrollTo({ top: 80, behavior: 'smooth' });
+        } else if (sceneIdx === 4) {
+          // Scene 5: 3-Tier Shedding & Economics summary
+          win.scrollTo({ top: 800, behavior: 'smooth' });
+        }
+      } catch (e) {
+        console.log("Iframe interaction error:", e);
+      }
+    }
+
+    function playScene(idx) {
+      currentSceneIdx = idx;
+      const s = SCENES[idx];
+      updatePills(idx);
+
+      document.getElementById("subSceneTitle").innerText = s.title;
+      document.getElementById("subText").innerText = s.text;
+
+      // Trigger preset in app
+      triggerPresetInApp(s.preset, idx);
+
+      // Stop all audios first
+      for (let i = 1; i <= 5; i++) {
+        const a = document.getElementById(`audio${i}`);
+        a.pause();
+      }
+
+      const audio = document.getElementById(s.audioId);
+      audio.currentTime = 0;
+      audio.play().catch(e => console.log("Audio play error:", e));
+
+      audio.onended = () => {
+        if (idx + 1 < SCENES.length) {
+          playScene(idx + 1);
+        } else {
+          stopPresentation();
+        }
+      };
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        pausePresentation();
+      } else {
+        startPresentation();
+      }
+    }
+
+    function startPresentation() {
+      isPlaying = true;
+      document.getElementById("playBtn").innerText = "⏸ Pause Walkthrough";
+      playScene(currentSceneIdx);
+
+      if (clockInterval) clearInterval(clockInterval);
+      clockInterval = setInterval(() => {
+        const s = SCENES[currentSceneIdx];
+        const audio = document.getElementById(s.audioId);
+        currentGlobalTime = s.start + (audio ? audio.currentTime : 0);
+
+        document.getElementById("curTimeText").innerText = formatTime(currentGlobalTime);
+        document.getElementById("subSceneTime").innerText = formatTime(currentGlobalTime);
+        const pct = (currentGlobalTime / TOTAL_DURATION) * 100;
+        document.getElementById("progressFill").style.width = pct + "%";
+      }, 100);
+    }
+
+    function pausePresentation() {
+      isPlaying = false;
+      document.getElementById("playBtn").innerText = "▶ Resume Walkthrough";
+      const s = SCENES[currentSceneIdx];
+      const audio = document.getElementById(s.audioId);
+      if (audio) audio.pause();
+      clearInterval(clockInterval);
+    }
+
+    function stopPresentation() {
+      pausePresentation();
+      currentSceneIdx = 0;
+      currentGlobalTime = 0;
+      document.getElementById("playBtn").innerText = "↺ Replay Walkthrough";
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+      }
+    }
+
+    function resetPresentation() {
+      pausePresentation();
+      currentSceneIdx = 0;
+      currentGlobalTime = 0;
+      document.getElementById("curTimeText").innerText = "00:00";
+      document.getElementById("progressFill").style.width = "0%";
+      updatePills(0);
+      document.getElementById("subSceneTitle").innerText = SCENES[0].title;
+      document.getElementById("subText").innerText = SCENES[0].text;
+    }
+
+    function seekToScene(sceneNum) {
+      currentSceneIdx = sceneNum - 1;
+      currentGlobalTime = SCENES[currentSceneIdx].start;
+      document.getElementById("curTimeText").innerText = formatTime(currentGlobalTime);
+      const pct = (currentGlobalTime / TOTAL_DURATION) * 100;
+      document.getElementById("progressFill").style.width = pct + "%";
+      if (isPlaying) {
+        playScene(currentSceneIdx);
+      } else {
+        updatePills(currentSceneIdx);
+        document.getElementById("subSceneTitle").innerText = SCENES[currentSceneIdx].title;
+        document.getElementById("subText").innerText = SCENES[currentSceneIdx].text;
+        triggerPresetInApp(SCENES[currentSceneIdx].preset, currentSceneIdx);
+      }
+    }
+
+    function trackClick(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const ratio = (e.clientX - rect.left) / rect.width;
+      const targetTime = ratio * TOTAL_DURATION;
+      const targetIdx = SCENES.findIndex(s => targetTime >= s.start && targetTime < s.start + s.duration);
+      if (targetIdx !== -1) {
+        seekToScene(targetIdx + 1);
+      }
+    }
+
+    // MediaRecorder Video Recording Functionality
+    async function toggleRecording() {
+      const recBtn = document.getElementById("recBtn");
+      const recDot = document.getElementById("recDot");
+      const recStatus = document.getElementById("recStatus");
+
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        recBtn.innerText = "⏺ Record Video (.webm)";
+        recDot.classList.remove("active");
+        recStatus.innerText = "STANDBY";
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          video: { frameRate: 30, displaySurface: "browser" },
+          audio: true
+        });
+
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp9" });
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) recordedChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(recordedChunks, { type: "video/webm" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = url;
+          a.download = "PolarGrid_AI_SIH2026_Walkthrough.webm";
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 2000);
+          recBtn.innerText = "⏺ Record Video (.webm)";
+          recDot.classList.remove("active");
+          recStatus.innerText = "SAVED";
+        };
+
+        mediaRecorder.start(1000);
+        recBtn.innerText = "⏹ Stop & Save Video";
+        recDot.classList.add("active");
+        recStatus.innerText = "RECORDING LIVE";
+
+        // Auto start presentation
+        if (!isPlaying) startPresentation();
+
+      } catch (err) {
+        alert("Screen recording cancelled or not supported in this browser context: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>

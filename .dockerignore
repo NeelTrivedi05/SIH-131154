@@ -1,0 +1,15 @@
+node_modules/
+frontend/node_modules/
+frontend/dist/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.git/
+.trace/
+media/
+ppt/
+sih_video_3min/
+brag-output/
+*.pptx
+*.wav
