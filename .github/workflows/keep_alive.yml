@@ -1,0 +1,34 @@
+name: Keep Render Backend Alive
+
+on:
+  schedule:
+    # Runs every 5 minutes (GitHub Actions cron)
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping Health Endpoint
+        run: |
+          # Target Render URL
+          TARGET_URL="${{ secrets.RENDER_URL || 'https://polargrid-ai-2efo.onrender.com' }}"
+          HEALTH_ENDPOINT="${TARGET_URL%/}/health"
+          
+          echo "Pinging health endpoint: $HEALTH_ENDPOINT at $(date -u)"
+          
+          # Send GET request with a 30s timeout; retry up to 2 times if waking from cold start
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}s" \
+            --retry 2 \
+            --max-time 30 \
+            "$HEALTH_ENDPOINT")
+          
+          echo "$RESPONSE"
+          
+          if echo "$RESPONSE" | grep -q "HTTP_STATUS:200"; then
+            echo "✅ Backend is warm and healthy (200 OK)."
+          else
+            echo "⚠️ Backend did not return 200 OK, but ping packet was delivered to reset idle timer."
+          fi
